@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import { Container, Box } from '@material-ui/core';
@@ -15,6 +15,23 @@ const useStyles = makeStyles({
 
 export const App = () => {
   const CustomClass = useStyles();
+  const [isData, setIsData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          return data;
+        });
+      setIsData(result);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Container className={CustomClass.wrapper} maxWidth="md" flex>
       <BrowserRouter>
@@ -25,7 +42,9 @@ export const App = () => {
           justifyContent="center"
           alignItems="center"
           bgcolor="lightgreen">
-          <Route exact path="/" component={Home} />
+          <Route exact path="/">
+            <Home isData={isData} />
+          </Route>
           <Route path="/form" component={Form} />
         </Box>
       </BrowserRouter>

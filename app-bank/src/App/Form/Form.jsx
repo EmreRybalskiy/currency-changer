@@ -11,19 +11,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { Formik } from 'formik';
 
-const useStyles = makeStyles({
-  margin: {
-    margin: '200px',
-  },
-});
-
 export const Form = () => {
-  const classes = useStyles();
   return (
     <Box height="50%" width="80%">
-      <Link to="/">
-        <ArrowBackIcon color="action" fontSize="large" cursor="pointer" />
-      </Link>
       <Formik initialValues={{ sell: '', receivedCurrency: '' }}>
         <form style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '50px' }}>
           <Box>
@@ -35,6 +25,7 @@ export const Form = () => {
               <MenuItem value={10}>USD</MenuItem>
               <MenuItem value={20}>EUR</MenuItem>
               <MenuItem value={30}>RUB</MenuItem>
+              <MenuItem value={40}>UAH</MenuItem>
             </Select>
             <FormHelperText>Today Rates</FormHelperText>
           </Box>
@@ -50,12 +41,15 @@ export const Form = () => {
               <MenuItem value={10}>USD</MenuItem>
               <MenuItem value={20}>EUR</MenuItem>
               <MenuItem value={30}>RUB</MenuItem>
+              <MenuItem value={40}>UAH</MenuItem>
             </Select>
             <FormHelperText>Today Rates</FormHelperText>
           </Box>
         </form>
       </Formik>
-      <Box textAlign="center">If you visit us often, you can set default value</Box>
+      <Link to="/">
+        <ArrowBackIcon color="action" fontSize="large" cursor="pointer" />
+      </Link>
     </Box>
   );
 };

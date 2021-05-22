@@ -5,7 +5,7 @@ import { Container, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Home } from './Home/Home.jsx';
-import { Main } from './Main/Main.jsx';
+import { Form } from './Form/Form.jsx';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -26,7 +26,7 @@ export const App = () => {
           alignItems="center"
           bgcolor="lightgreen">
           <Route exact path="/" component={Home} />
-          <Route path="/main" component={Main} />
+          <Route path="/form" component={Form} />
         </Box>
       </BrowserRouter>
     </Container>

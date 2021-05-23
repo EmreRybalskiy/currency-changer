@@ -1,0 +1,1 @@
+export const NATIONAL_CURRENCY = "UAH";

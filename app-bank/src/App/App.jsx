@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Home } from './Home/Home.jsx';
 import { Form } from './Form/Form.jsx';
+import { Table } from './Table/Table.jsx';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -13,24 +14,49 @@ const useStyles = makeStyles({
   },
 });
 
+const FIRST_DEFAULT_VALUE = 'USD';
+const SECOND_DEFAULT_VALUE = 'UAH';
+
+const onlyUnique = (value, index, self) => {
+  return self.indexOf(value) === index;
+};
+
 export const App = () => {
   const CustomClass = useStyles();
-  const [isData, setIsData] = useState({});
+
+  const [data, setData] = useState([]);
+  const [firstOption, setFirstOption] = useState(FIRST_DEFAULT_VALUE);
+  const [secondOption, setSecondOption] = useState(SECOND_DEFAULT_VALUE);
+  const [currencys, setCurrencys] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          return data;
-        });
-      setIsData(result);
-    };
-
     fetchData();
+    setInitialValues();
   }, []);
+
+  const setInitialValues = () => {
+    const firstOption = localStorage.getItem('firstOption');
+    const secondOption = localStorage.getItem('secondOption');
+
+    firstOption && setFirstOption(firstOption);
+    secondOption && setSecondOption(secondOption);
+  };
+
+  const fetchData = async () => {
+    const result = await fetch('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      });
+
+    const ccys = result.map((el) => el.ccy);
+    const baseCcys = result.map((el) => el.base_ccy);
+    const uniqueCurrency = [...ccys, ...baseCcys].filter(onlyUnique);
+    setData(result);
+    setCurrencys(uniqueCurrency);
+  };
 
   return (
     <Container className={CustomClass.wrapper} maxWidth="md" flex>
@@ -43,9 +69,27 @@ export const App = () => {
           alignItems="center"
           bgcolor="lightgreen">
           <Route exact path="/">
-            <Home isData={isData} />
+            <Home firstOption={firstOption} secondOption={secondOption} />
           </Route>
-          <Route path="/form" component={Form} />
+          <Route path="/form">
+            <Form
+              currencys={currencys}
+              firstOption={firstOption}
+              setFirstOption={setFirstOption}
+              secondOption={secondOption}
+              setSecondOption={setSecondOption}
+              data={data}
+            />
+          </Route>
+          <Route path="/table">
+            <Table
+              setFirstOption={setFirstOption}
+              setSecondOption={setSecondOption}
+              currencys={currencys}
+              firstOption={firstOption}
+              secondOption={secondOption}
+            />
+          </Route>
         </Box>
       </BrowserRouter>
     </Container>

@@ -12,7 +12,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { NATIONAL_CURRENCY } from '../../helpers/constants.js';
 
 import { Formik } from 'formik';
-import * as yup from 'yup';
 
 export const Form = ({
   currencys,
